@@ -1,0 +1,24 @@
+{
+  "name": "ts_project",
+  "version": "1.0.0",
+  "description": "跟着视频做的 ts 项目，全栈",
+  "main": "index.js",
+  "scripts": {
+    "dev": "ts-node ./src/crowller.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/longquan521/ts_project.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/longquan521/ts_project/issues"
+  },
+  "homepage": "https://github.com/longquan521/ts_project#readme",
+  "devDependencies": {
+    "ts-node": "^9.0.0",
+    "typescript": "^4.0.3"
+  }
+}

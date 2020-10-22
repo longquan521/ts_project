@@ -35,3 +35,59 @@
 // console.log(demo1 === demo2); //true
 // console.log(demo1.name);
 // console.log(demo2.name);
+
+/**
+ * 10.22下午 readonly 只能读不能改
+ */
+// class Person {
+//   public readonly name: string;
+//   constructor(name: string) {
+//     this.name = name;
+//   }
+// }
+// const person = new Person('dell');
+// // person.name = 'hello';
+// console.log(person.name);
+
+// 抽象类,只能继承，不能new实例化
+// abstract class Geom {
+//   width: number;
+//   getType() {
+//     return 'Gemo';
+//   }
+//   // 抽象方法
+//   abstract getArea(): number;
+// }
+// class Circle extends Geom {
+//   getArea() {
+//     return 123;
+//   }
+// }
+// class Square {}
+// class Triangle {}
+
+interface Person {
+  name: string;
+}
+
+interface Teacher extends Person {
+  teachingAge: number;
+}
+
+interface Student extends Person {
+  age: number;
+}
+const teacher = {
+  name: 'dell',
+  teachingAge: 3,
+};
+
+const student = {
+  name: 'lee',
+  age: 18,
+};
+const getUserInfo = (user: Teacher | Student) => {
+  console.log(user.name);
+};
+getUserInfo(teacher);
+getUserInfo(student);

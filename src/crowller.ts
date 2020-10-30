@@ -6,64 +6,64 @@ import fs from 'fs';
 import path from 'path';
 import superagent from 'superagent';
 import cheerio from 'cheerio';
-interface Ul {
+interface Sm {
   title: string;
   descs: string;
 }
-interface Ulresult {
+interface SmResult {
   time: number;
-  data: Ul[];
+  data: Sm[];
 }
 interface Content {
-  [propName: number]: Ul[];
+  [propName: number]: Sm[];
 }
 // 类函数Crowller负责
 class Crowller {
-  private secret = 'secretKey';
-  // url = 'https://longquan521.github.io/index.html';
-  url = 'https://xueqiu.com/?category=snb_article';
-  private rawHtml = '';
+  private url = 'https://xueqiu.com/?category=snb_article';
+  private filePath = path.resolve(__dirname, '../data/ul.json');
   /**
    * getSmInfo()爬取页面内容
    */
   getSmInfo(html: string) {
     const $ = cheerio.load(html);
-    const ulli = $('.AnonymousHome_home__timeline__item_3vU');
-    const ulInfos: Ul[] = [];
-    ulli.map((index, element) => {
+    const allContents = $('.AnonymousHome_home__timeline__item_3vU');
+    const SmInfos: Sm[] = [];
+    allContents.map((index, element) => {
       const title = $(element).find('.AnonymousHome_user-name_3wN').text();
-      const descs = $(element).find('h3 a').text() || '内容等待更新';
-      ulInfos.push({ title, descs });
+      const descs = $(element).find('h3 a').text() || '内容等待更新' + index;
+      SmInfos.push({ title, descs });
     });
     // 加个当前时刻
     return {
       time: new Date().getTime(),
-      data: ulInfos,
+      data: SmInfos,
     };
     // console.log(result);
   }
+  // 获取网页的内容，得到字符串
   async getRawHtml() {
     const result = await superagent.get(this.url);
     return result.text;
   }
-  generateJsonContent(ulInfo: Ulresult) {
-    const filePath = path.resolve(__dirname, '../data/ul.json');
+  // 文件整合
+  generateJsonContent(SmInfo: SmResult) {
     let fileContent: Content = {};
-    if (fs.existsSync(filePath)) {
-      console.log('123456');
-      fileContent = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+    if (fs.existsSync(this.filePath)) {
+      fileContent = JSON.parse(fs.readFileSync(this.filePath, 'utf-8'));
     }
-    fileContent[ulInfo.time] = ulInfo.data;
+    fileContent[SmInfo.time] = SmInfo.data;
     return fileContent;
-    // console.log(fileContent);
+  }
+  // 负责写入文件
+  writeFile(content: string) {
+    fs.writeFileSync(this.filePath, content);
   }
   async initSpiderProcess() {
-    const filePath = path.resolve(__dirname, '../data/ul.json');
     const html = await this.getRawHtml();
-    const ulInfo = this.getSmInfo(html);
-    const fileContent = this.generateJsonContent(ulInfo);
-    fs.writeFileSync(filePath, JSON.stringify(fileContent));
-    // console.log(ulInfo);
+    const SmInfo = this.getSmInfo(html);
+    const fileContent = this.generateJsonContent(SmInfo);
+    this.writeFile(JSON.stringify(fileContent));
+    // fs.writeFileSync(this.filePath, JSON.stringify(fileContent));
   }
   constructor() {
     this.initSpiderProcess();

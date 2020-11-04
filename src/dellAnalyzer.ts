@@ -32,7 +32,6 @@ export default class DellAnalyzer implements Analyzer {
       time: new Date().getTime(),
       data: SmInfos,
     };
-    // console.log(result);
   }
 
   // 文件整合
@@ -49,7 +48,6 @@ export default class DellAnalyzer implements Analyzer {
   public analyze(html: string, filePath: string) {
     const SmInfo = this.getSmInfo(html);
     const fileContent = this.generateJsonContent(SmInfo, filePath);
-    // return JSON.stringify(fileContent);
-    return fileContent;
+    return JSON.stringify(fileContent);
   }
 }

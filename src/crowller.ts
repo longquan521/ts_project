@@ -5,11 +5,12 @@
 import fs from 'fs';
 import path from 'path';
 import superagent from 'superagent';
-import DellAnalyzer from './dellAnalyzer';
+// import DellAnalyzer from './dellAnalyzer';
+import LeeAnalyzer from './leeAnalyzer';
 
 // 定义analyzer的接口类型
 export interface Analyzer {
-  analyze: (html: string, filePath: string) => {};
+  analyze: (html: string, filePath: string) => string;
 }
 
 // 类函数Crowller负责
@@ -31,12 +32,13 @@ class Crowller {
     const fileContent = this.analyzer.analyze(html, this.filePath);
     this.writeFile(fileContent);
   }
-  constructor(private url: string, private analyzer: any) {
+  constructor(private url: string, private analyzer: Analyzer) {
     this.initSpiderProcess();
   }
 }
 
 // 网址单独拿出来
 const url = 'https://xueqiu.com/?category=snb_article';
-const analyzer = new DellAnalyzer();
+// const analyzer = new DellAnalyzer();
+const analyzer = new LeeAnalyzer();
 new Crowller(url, analyzer);

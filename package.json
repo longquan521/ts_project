@@ -4,7 +4,14 @@
   "description": "跟着视频做的 ts 项目，全栈",
   "main": "index.js",
   "scripts": {
-    "dev": "ts-node ./src/crowller.ts"
+    "dev:build": "tsc -w",
+    "dev:start": "nodemon node ./build/crowller.js",
+    "dev": "concurrently npm:dev:*"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "data/*"
+    ]
   },
   "repository": {
     "type": "git",
@@ -20,6 +27,8 @@
   "devDependencies": {
     "@types/cheerio": "^0.22.22",
     "@types/superagent": "^4.1.10",
+    "concurrently": "^5.3.0",
+    "nodemon": "^2.0.6",
     "ts-node": "^9.0.0",
     "typescript": "^4.0.3"
   },

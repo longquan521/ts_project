@@ -14,6 +14,14 @@ interface Content {
   [propName: number]: Sm[];
 }
 export default class DellAnalyzer implements Analyzer {
+  // 给个静态名，写单例模式
+  private static instance: DellAnalyzer;
+  static getInstance() {
+    if (!DellAnalyzer.instance) {
+      DellAnalyzer.instance = new DellAnalyzer();
+    }
+    return DellAnalyzer.instance;
+  }
   // 整体剪切
   /**
    * getSmInfo()爬取页面内容
@@ -35,7 +43,7 @@ export default class DellAnalyzer implements Analyzer {
   }
 
   // 文件整合
-  generateJsonContent(SmInfo: SmResult, filePath: string) {
+  private generateJsonContent(SmInfo: SmResult, filePath: string) {
     let fileContent: Content = {};
     if (fs.existsSync(filePath)) {
       fileContent = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
@@ -44,10 +52,12 @@ export default class DellAnalyzer implements Analyzer {
     return fileContent;
   }
 
-  // 定于analyze方法,用来做分析
+  // 定义analyze方法,用来做分析
   public analyze(html: string, filePath: string) {
     const SmInfo = this.getSmInfo(html);
     const fileContent = this.generateJsonContent(SmInfo, filePath);
     return JSON.stringify(fileContent);
   }
+
+  private constructor() {}
 }
